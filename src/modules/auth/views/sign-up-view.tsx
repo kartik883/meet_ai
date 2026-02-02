@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form";
+import { FaGoogle, FaGithub } from "react-icons/fa";
 
 
 
@@ -20,51 +21,75 @@ import { useState } from "react";
 
 
 const formSchema = z.object({
-  name:z.string().min(1,{ message: "name is required" }),
+    name: z.string().min(1, { message: "name is required" }),
     email: z.string().email(),
     password: z.string().min(1, { message: "Password is required" }),
     confirmPassword: z.string().min(1, { message: "Password is required" }),
-}).refine((data)=> data.password === data.confirmPassword,{
-  message:"password not match",
-  path:["confirmPassword"]
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "password not match",
+    path: ["confirmPassword"]
 })
 
 const SignUpView = () => {
-    const router= useRouter();
-    const [error, setError] = useState<string |null>(null);
+    const router = useRouter();
+    const [error, setError] = useState<string | null>(null);
     const [pending, setPending] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-          name:"",
+            name: "",
             email: "",
             password: "",
-            confirmPassword:""
+            confirmPassword: ""
         }
     });
-    const onSubmit =  (data:z.infer<typeof formSchema>)=>{
+    const onSubmit = (data: z.infer<typeof formSchema>) => {
         setError(null);
         setPending(true);
-         authClient.signUp.email({
-          name:data.name,
-            email:data.email,
-            password:data.password,
-           
+        authClient.signUp.email({
+            name: data.name,
+            email: data.email,
+            password: data.password,
+            callbackURL:"/"
+
 
         },
-        {
-            onSuccess:()=>{
-                setPending(false);
-                router.push("/")
-            },
-            onError:({error})=>{
-                setPending(false);
-                setError(error.message)
+            {
+                onSuccess: () => {
+                    setPending(false);
+                     router.push("/");
+                    
+                },
+                onError: ({ error }) => {
+                    setPending(false);
+                    setError(error.message)
+                }
             }
-        }
-    
-    )
+
+        )
     }
+
+     const onSocial = (provider:"github"|"google") => {
+        setError(null);
+        setPending(true);
+        authClient.signIn.social({
+            provider:provider,
+            callbackURL:"/"
+        },
+            {
+                onSuccess: () => {
+                    setPending(false);
+                    
+                },
+                onError: ({ error }) => {
+                    setPending(false);
+                    setError(error.message)
+                }
+            }
+
+        )
+    }
+
     return (
         <div className='flex flex-col gap-6'>
             <Card className='overflow-hidden p-0'>
@@ -190,32 +215,34 @@ const SignUpView = () => {
 
                                 </Button>
                                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                                <span className="bg-card text-muted-foreground relative z-10 px-2">
-                                    Or continue with
-                                </span>
+                                    <span className="bg-card text-muted-foreground relative z-10 px-2">
+                                        Or continue with
+                                    </span>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
-                                    <Button 
-                                    disabled={pending}
-                                    variant="outline"
-                                    type="button"
-                                    className="w-full">
-                                        Google
+                                    <Button
+                                        disabled={pending}
+                                        onClick={() => onSocial("google")}
+                                        variant="outline"
+                                        type="button"
+                                        className="w-full">
+                                        <FaGoogle/>
                                     </Button>
 
-                                     <Button 
-                                     disabled={pending}
-                                    variant="outline"
-                                    type="button"
-                                    className="w-full">
-                                        Github
+                                    <Button
+                                        disabled={pending}
+                                         onClick={() => onSocial("github")}
+                                        variant="outline"
+                                        type="button"
+                                        className="w-full">
+                                        <FaGithub/>
                                     </Button>
                                 </div>
 
                                 <div className="text-center text-sm">
-                                   Already have an account? {" "}
-                                     <Link href="/sign-in" className="underline underline-offset-4">Sign In</Link>
+                                    Already have an account? {" "}
+                                    <Link href="/sign-in" className="underline underline-offset-4">Sign In</Link>
 
                                 </div>
 
