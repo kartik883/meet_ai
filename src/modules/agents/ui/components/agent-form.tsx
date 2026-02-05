@@ -69,7 +69,7 @@ initialValues
             <GeneratedAvatar
             seed={form.watch("name")}
             variant="botttsNeutral"
-            className="boder size-16"
+            className="border size-16"
             />
             <FormField
             name="name"
