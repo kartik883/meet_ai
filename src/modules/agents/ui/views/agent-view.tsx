@@ -8,23 +8,35 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "../components/data-table";
 import { columns } from "../components/columns";
 import { EmptyState } from "@/components/empty-state";
+import { useAgentFilters } from "../../hooks/use-agent-filters";
+import { DataPagination } from "../components/data-pagination";
 
 
 export const AgentsViews = () => {
+    const [filters,setFilters] = useAgentFilters();
     const trpc = useTRPC();
-    const {data} = useSuspenseQuery(trpc.agents.getMany.queryOptions());
+    const {data} = useSuspenseQuery(trpc.agents.getMany.queryOptions({
+    ...filters,
+    }));
   
   
     
     return (
         <div className="flex-1 pb-4 px-4 md:px-8 flex flex-col gap-y-4">
-            {data.length === 0 ? (
+            {data.items.length === 0 ? (
                 <EmptyState
                     title="Create your first agent"
                     description="create for meeting and follow instrucion"
                 />
             ) : (
-                <DataTable data={data} columns={columns} />
+                <>
+                    <DataTable data={data.items} columns={columns} />
+                    <DataPagination
+                        page={filters.page}
+                        totalPages={data.totalPages}
+                        onPageChange={(newPage)=>setFilters({page: newPage})}
+                    />
+                </>
             )}
         </div>
     );
