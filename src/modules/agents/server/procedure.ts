@@ -25,6 +25,7 @@ export const agentRouter=createTRPCRouter({
         message:"Agents not found"
       });
     }
+    return uptadeAgent;
   }),
   remove:protectedProcedure.input(z.object({id:z.string()}))
   .mutation(async({ctx,input})=>{

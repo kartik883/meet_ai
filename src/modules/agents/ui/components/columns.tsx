@@ -1,6 +1,6 @@
 "use client"
 import {ColumnDef} from "@tanstack/react-table"
-import { AgentGetOne } from "../../tpes"
+import { AgentGetOne } from "../../types"
 import { GeneratedAvatar } from "@/components/ui/ui/generated-avatar"
 import { Badge } from "@/components/ui/badge"
 import { CornerDownRightIcon, CornerRightDownIcon, VideoIcon } from "lucide-react"
