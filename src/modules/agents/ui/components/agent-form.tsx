@@ -1,5 +1,5 @@
 import { useTRPC } from "@/trpc/client";
-import { AgentGetOne } from "../../tpes";
+import { AgentGetOne } from "../../types";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
