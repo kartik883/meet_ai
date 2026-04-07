@@ -9,12 +9,15 @@ import { Suspense } from "react";
 import { MeetingsClientBoundary } from "@/modules/meetings/ui/views/meetings-client-boundry";
 import { SearchParams } from "nuqs";
 import { loadSearchParams } from "@/modules/meetings/params";
+import { ErrorBoundary } from "react-error-boundary";
 
 interface Props{
     searchParam:Promise<SearchParams>;
 }
 const Page= async ({searchParam}:Props)=>{
+
     const filters = await loadSearchParams(searchParam);
+
     const session = await  auth.api.getSession({
         headers:await headers(),
         });
@@ -29,10 +32,15 @@ const Page= async ({searchParam}:Props)=>{
     );
     return (
         <>
-        <MeetingsListHeader/>
-        <HydrationBoundary state={dehydrate(queryClient)}>
-        <MeetingsClientBoundary />
-      </HydrationBoundary>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+                  <Suspense fallback={<MeetingsLoadingState/>}>
+                  <ErrorBoundary fallback={<MeetingsErrorState/>}>
+                    <MeetingsView />
+                  </ErrorBoundary>
+                   
+                   </Suspense>
+      
+              </HydrationBoundary>
 
         </>
        

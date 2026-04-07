@@ -10,6 +10,7 @@ import { EmptyState } from "@/components/empty-state";
 import { useRouter } from "next/navigation";
 import { useMeetingsFilters } from "../../hooks/use-meetings-filters";
 import { DataPagination } from "@/components/data-pagination";
+import { MeetingsListHeader } from "../comonents/meeting-list-header";
 
 export const MeetingsView=()=>{
 
@@ -21,6 +22,8 @@ export const MeetingsView=()=>{
     }));
 
     return(
+        <>
+        <MeetingsListHeader/>
         <div>
             <DataTable data={data.items} columns={columns}
              onRowClick={(row)=>router.push(`/meetings/${row.id}`)}/>
@@ -39,6 +42,7 @@ export const MeetingsView=()=>{
 
             
         </div>
+        </>
     )
 }
 

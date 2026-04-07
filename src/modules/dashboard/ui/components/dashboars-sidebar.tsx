@@ -8,6 +8,8 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { DashboardUserButton } from "./dashboard-user-button";
+import { authClient } from "@/lib/auth-client";
+import router from "next/router";
 
 const firstSection = [
     {
@@ -32,6 +34,7 @@ const secondSection = [
 ];
 
 export const DashboardSidebar = () => {
+   
     const pathname = usePathname();
     return (
         <Sidebar className="h-screen flex flex-col">

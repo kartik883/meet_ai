@@ -21,8 +21,6 @@ export const EmptyState = ({
                 <h6 className="text-lg font-medium">{title}</h6>
                 <p className="text-sm text-muted-foreground">{description}</p>
 
-           
-
         </div>
     </div>
 )

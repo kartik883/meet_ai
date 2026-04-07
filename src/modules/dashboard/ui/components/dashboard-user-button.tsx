@@ -65,7 +65,7 @@ export const DashboardUserButton = ()=>{
 
                     <Button
                     variant="outline"
-                    onClick={()=>{onLogout}}
+                    onClick={onLogout}
                     >
                         <LogOutIcon className="size-4 text-black"/>
                         Logout
